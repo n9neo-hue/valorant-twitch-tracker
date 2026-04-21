@@ -28,7 +28,7 @@ Design im futuristischen "N9NE / esports HUD" Style.
 
 1. Lade die HTML-Datei herunter
 2. Passe die Konfiguration im Script an (siehe unten)
-3. Öffne  OBS (Browser Source) und füge es als Broswer Quelle in OBS hinzu.
+3. Öffne  OBS (Browser Source) und füge es als Broswer Quelle in OBS hinzu 1920x1080.
 4. Fertig ✅
 
 ---
