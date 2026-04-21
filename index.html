@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root { --red:#FF2020; }
+  body { width:1920px; height:1080px; background:transparent; overflow:hidden; }
+
+  .widget {
+    position:absolute; left:32px; bottom:62px;
+    background:linear-gradient(135deg, rgba(10,10,10,0.93) 0%, rgba(18,18,18,0.88) 100%);
+    border:2px solid rgba(255,32,32,0.45); border-left:3px solid var(--red);
+    clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,0 100%);
+    width:230px;
+    overflow:hidden;
+  }
+
+  /* ── N9NE HEADER ── */
+  .widget-header {
+    background:var(--red);
+    padding:5px 10px;
+    display:flex; align-items:center; justify-content:space-between;
+    gap:8px;
+  }
+  .logo-wrap {
+    display:flex; flex-direction:column; align-items:flex-start; gap:0; line-height:1;
+  }
+  .logo-powered {
+    font-family:'Barlow Condensed',sans-serif; font-size:8px; font-weight:700;
+    color:rgba(0,0,0,0.55); letter-spacing:2px; text-transform:uppercase; line-height:1;
+  }
+  .logo-name {
+    font-family:'Bebas Neue',sans-serif; font-size:20px;
+    color:#000; letter-spacing:4px; line-height:1; position:relative;
+  }
+  .logo-name span { color:#fff; }
+  .logo-name::before,.logo-name::after {
+    content:'N9NE'; position:absolute; top:0; left:0; opacity:0;
+    font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:4px;
+  }
+  .logo-name::before { color:#ff0000; animation:g1 7s infinite; }
+  .logo-name::after  { color:#00ffff; animation:g2 7s infinite; }
+  @keyframes g1 { 0%,90%,100%{opacity:0;}91%{opacity:0.6;transform:translate(-1px,0);}93%{opacity:0;}95%{opacity:0.4;transform:translate(1px,0);}97%{opacity:0;} }
+  @keyframes g2 { 0%,90%,100%{opacity:0;}92%{opacity:0.4;transform:translate(1px,0);}94%{opacity:0;}96%{opacity:0.3;transform:translate(-1px,0);}98%{opacity:0;} }
+
+  .header-right { display:flex; align-items:center; gap:5px; }
+  .live-dot { width:6px; height:6px; border-radius:50%; background:#000; animation:pulse 1s ease-in-out infinite; }
+  .live-txt { font-family:'Bebas Neue',sans-serif; font-size:12px; color:#000; letter-spacing:2px; }
+  @keyframes pulse { 0%,100%{opacity:1;}50%{opacity:0.25;} }
+
+  /* ── BODY ── */
+  .widget-body { padding:8px 10px; display:flex; flex-direction:column; gap:7px; }
+
+  /* ── RANK ROW ── */
+  .rank-row { display:flex; align-items:center; gap:8px; }
+  .rank-icon { width:40px; height:40px; object-fit:contain; filter:drop-shadow(0 0 4px rgba(255,32,32,0.4)); flex-shrink:0; }
+  .rank-icon-ph { width:40px; height:40px; border:1px solid rgba(255,32,32,0.3); border-radius:50%; flex-shrink:0; }
+  .rank-info { flex:1; display:flex; flex-direction:column; gap:1px; }
+  .rank-lbl  { font-family:'Barlow Condensed',sans-serif; font-size:8px; color:rgba(255,255,255,0.7); letter-spacing:2px; text-transform:uppercase; }
+  .rank-name { font-family:'Bebas Neue',sans-serif; font-size:20px; color:#fff; letter-spacing:1px; line-height:1; }
+  .rr-row { display:flex; align-items:center; gap:5px; }
+  .rr-bar-bg   { width:60px; height:2px; background:rgba(255,255,255,0.1); border-radius:1px; overflow:hidden; }
+  .rr-bar-fill { height:100%; background:var(--red); border-radius:1px; transition:width 1s ease; }
+  .rr-text   { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:12px; color:var(--red); letter-spacing:1px; }
+  .rr-change { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:10px; letter-spacing:1px; opacity:0; transition:opacity 0.5s; }
+  .rr-change.visible { opacity:1; }
+  .rr-change.pos { color:#4ade80; } .rr-change.neg { color:#f87171; }
+
+  .sep { height:1px; background:rgba(255,32,32,0.18); }
+
+  /* ── PEAK ROW ── */
+  .peak-row { display:flex; align-items:center; gap:8px; }
+  .peak-icon { width:28px; height:28px; object-fit:contain; filter:drop-shadow(0 0 3px rgba(255,32,32,0.3)); flex-shrink:0; }
+  .peak-icon-ph { width:28px; height:28px; flex-shrink:0; }
+  .peak-info { flex:1; display:flex; flex-direction:column; gap:0px; }
+  .peak-lbl  { font-family:'Barlow Condensed',sans-serif; font-size:8px; color:rgba(255,255,255,0.7); letter-spacing:2px; text-transform:uppercase; }
+  .peak-name { font-family:'Bebas Neue',sans-serif; font-size:16px; color:rgba(255,255,255,0.7); letter-spacing:1px; line-height:1; }
+  .peak-rr   { font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:11px; color:rgba(255,32,32,0.55); letter-spacing:1px; }
+
+  /* ── W/L ── */
+  .wl-section { display:flex; flex-direction:column; gap:4px; }
+  .wl-header  { display:flex; align-items:center; justify-content:space-between; }
+  .wl-title   { font-family:'Barlow Condensed',sans-serif; font-size:8px; color:rgba(255,255,255,0.7); letter-spacing:2px; text-transform:uppercase; }
+  .wl-reset   { font-family:'Barlow Condensed',sans-serif; font-size:8px; color:rgba(255,255,255,0.15); letter-spacing:1px; }
+  .wl-score   { display:flex; align-items:baseline; gap:5px; }
+  .wl-w  { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#4ade80; letter-spacing:1px; line-height:1; }
+  .wl-vs { font-family:'Bebas Neue',sans-serif; font-size:14px; color:rgba(255,255,255,0.18); line-height:1; }
+  .wl-l  { font-family:'Bebas Neue',sans-serif; font-size:26px; color:#f87171; letter-spacing:1px; line-height:1; }
+  .wl-games { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:rgba(255,255,255,0.25); letter-spacing:1px; margin-left:3px; }
+  .wl-dots  { display:flex; align-items:center; gap:3px; flex-wrap:wrap; }
+  .wl-dot   { width:7px; height:7px; border-radius:2px; }
+  .wl-dot.w { background:#4ade80; box-shadow:0 0 3px rgba(74,222,128,0.4); }
+  .wl-dot.l { background:#f87171; box-shadow:0 0 3px rgba(248,113,113,0.3); }
+  .wl-dot.e { background:rgba(255,255,255,0.06); }
+  .wl-none  { font-family:'Barlow Condensed',sans-serif; font-size:10px; color:rgba(255,255,255,0.18); letter-spacing:1px; }
+
+  .status-dot { position:absolute; top:6px; right:8px; width:4px; height:4px; border-radius:50%; background:rgba(0,0,0,0.5); }
+  .status-dot.loading { background:#f59e0b; animation:pulse 1s ease-in-out infinite; }
+  .status-dot.offline { background:#555; }
+</style>
+</head>
+<body>
+<div class="widget">
+  <div class="status-dot loading" id="dot"></div>
+
+  <!-- Header mit N9NE Logo -->
+  <div class="widget-header">
+    <div class="logo-wrap"><div class="logo-powered">powered by</div><div class="logo-name">N<span>9</span>NE</div></div>
+    <div class="header-right">
+      <div class="live-dot"></div>
+      <div class="live-txt">VALORANT</div>
+    </div>
+  </div>
+
+  <div class="widget-body">
+
+    <!-- Current Rank -->
+    <div class="rank-row">
+      <div id="iconWrap"><div class="rank-icon-ph"></div></div>
+      <div class="rank-info">
+        <div class="rank-lbl">Current Peak</div>
+        <div class="rank-name" id="rankName">Laden…</div>
+        <div class="rr-row">
+          <div class="rr-bar-bg"><div class="rr-bar-fill" id="rrBar" style="width:0%"></div></div>
+          <div class="rr-text" id="rrText">— RR</div>
+          <div class="rr-change" id="rrChange"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- Lifetime Peak -->
+    <div class="peak-row">
+      <div id="peakIconWrap"><div class="peak-icon-ph"></div></div>
+      <div class="peak-info">
+        <div class="peak-lbl">Lifetime Peak</div>
+        <div class="peak-name" id="peakName">—</div>
+      </div>
+    </div>
+
+    <div class="sep"></div>
+
+    <!-- W/L Today -->
+    <div class="wl-section">
+      <div class="wl-header">
+        <div class="wl-title">W / L Heute</div>
+        <div class="wl-reset" id="wlReset">Reset in —</div>
+      </div>
+      <div class="wl-score">
+        <div class="wl-w" id="wlW">0</div>
+        <div class="wl-vs">—</div>
+        <div class="wl-l" id="wlL">0</div>
+        <div class="wl-games" id="wlGames">0 Games</div>
+      </div>
+      <div class="wl-dots" id="wlDots">
+        <span class="wl-none">Noch keine Matches heute</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const API_KEY       = 'YOUR API KEY -> https://api.henrikdev.xyz/dashboard/ U CAN CREATE IT HERE';
+  const NAME          = 'INGAME NAME';
+  const TAG           = '#XXXX';
+  const REGION        = 'eu, tr, cn UR LOCATION HERE';
+  const REFRESH       = 5 * 60 * 1000;
+  const KNOWN_PEAK_RR = 0;
+  const headers       = { 'Authorization': API_KEY };
+  let lastRR = null;
+
+  (() => {
+    if (parseInt(localStorage.getItem('peak_rr_bootstrap') || '0') < KNOWN_PEAK_RR)
+      window._bootstrapPeak = KNOWN_PEAK_RR;
+  })();
+
+  function updateResetTimer() {
+    const now = new Date(), end = new Date();
+    end.setHours(23,59,59,999);
+    const diff = end - now;
+    const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000);
+    document.getElementById('wlReset').textContent = `Reset in ${h}h ${String(m).padStart(2,'0')}m`;
+  }
+  updateResetTimer();
+  setInterval(updateResetTimer, 60000);
+
+  function isToday(unix) {
+    const d = new Date(unix*1000), t = new Date();
+    return d.getFullYear()===t.getFullYear() && d.getMonth()===t.getMonth() && d.getDate()===t.getDate();
+  }
+
+  async function fetchAll() {
+    try {
+      document.getElementById('dot').className = 'status-dot loading';
+
+      const mmrRes  = await fetch(`https://api.henrikdev.xyz/valorant/v2/mmr/${REGION}/${encodeURIComponent(NAME)}/${encodeURIComponent(TAG)}`, { headers });
+      const mmr     = (await mmrRes.json()).data;
+
+      if (mmr) {
+        const rankFull = mmr.current_data?.currenttierpatched || 'Unranked';
+        const rr       = mmr.current_data?.ranking_in_tier ?? 0;
+        const change   = mmr.current_data?.mmr_change_to_last_game ?? null;
+        const icon     = mmr.current_data?.images?.small || null;
+
+        document.getElementById('rankName').textContent = rankFull;
+        document.getElementById('rrText').textContent   = `${rr} RR`;
+        document.getElementById('rrBar').style.width    = `${Math.min(rr,100)}%`;
+        if (icon) document.getElementById('iconWrap').innerHTML = `<img class="rank-icon" src="${icon}">`;
+
+        if (change !== null && lastRR !== null) {
+          const el = document.getElementById('rrChange');
+          el.textContent = (change >= 0 ? '+' : '') + change;
+          el.className   = `rr-change visible ${change >= 0 ? 'pos' : 'neg'}`;
+          setTimeout(() => { el.className = 'rr-change'; }, 9000);
+        }
+        lastRR = rr;
+
+        const peak     = mmr.highest_rank;
+        const peakTier = peak?.tier;
+        const peakIcon = peakTier ? `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${peakTier}/smallicon.png` : null;
+        document.getElementById('peakName').textContent = peak?.patched_tier || '---';
+        if (peakIcon) document.getElementById('peakIconWrap').innerHTML = `<img class="peak-icon" src="${peakIcon}">`;
+
+        // Peak RR via localStorage
+        try {
+          const actKeys    = Object.keys(mmr.by_season || {});
+          const currentAct = actKeys.length > 0 ? actKeys[actKeys.length-1] : 'unknown';
+          const storeKey   = `peak_rr_${currentAct}`;
+          const stored     = parseInt(localStorage.getItem(storeKey) || '0');
+
+          const histRes = await fetch(
+            `https://api.henrikdev.xyz/valorant/v1/mmr-history/${REGION}/${encodeURIComponent(NAME)}/${encodeURIComponent(TAG)}?queue=competitive&start=0&end=100`,
+            { headers }
+          );
+          const history = ((await histRes.json()).data || []);
+          let apiPeak = 0;
+          if (history.length > 0) {
+            const best = history.reduce((a,b) => (a.elo||0)>(b.elo||0)?a:b);
+            apiPeak = best.ranking_in_tier || 0;
+          }
+
+          const finalPeak = Math.max(stored, apiPeak, window._bootstrapPeak || 0);
+          if (finalPeak > stored) localStorage.setItem(storeKey, finalPeak);
+
+          const lastAct = localStorage.getItem('last_act');
+          if (lastAct && lastAct !== currentAct) localStorage.removeItem(`peak_rr_${lastAct}`);
+          localStorage.setItem('last_act', currentAct);
+
+          document.getElementById('peakRR').textContent = finalPeak > 0 ? `${finalPeak} RR` : '--- RR';
+        } catch(e) {
+        }
+      }
+
+      // W/L heute
+      const matches = ((await (await fetch(
+        `https://api.henrikdev.xyz/valorant/v3/matches/${REGION}/${encodeURIComponent(NAME)}/${encodeURIComponent(TAG)}?mode=competitive&size=20`,
+        { headers }
+      )).json()).data || []);
+
+      const today = [];
+      for (const match of matches) {
+        if (!isToday(match.metadata?.game_start)) continue;
+        const me = match.players?.all_players?.find(p => p.name?.toLowerCase()===NAME.toLowerCase() && p.tag===TAG);
+        if (!me) continue;
+        today.push(match.teams?.[me.team?.toLowerCase()]?.has_won ? 'w' : 'l');
+      }
+
+      document.getElementById('wlW').textContent     = today.filter(r=>r==='w').length;
+      document.getElementById('wlL').textContent     = today.filter(r=>r==='l').length;
+      document.getElementById('wlGames').textContent = `${today.length} Game${today.length!==1?'s':''}`;
+
+      const dotsEl = document.getElementById('wlDots');
+      if (today.length === 0) {
+        dotsEl.innerHTML = '<span class="wl-none">Noch keine Matches heute</span>';
+      } else {
+        dotsEl.innerHTML = today.slice(0,15).map(r=>`<div class="wl-dot ${r}"></div>`).join('');
+        for (let i=today.length; i<Math.min(today.length+3,15); i++)
+          dotsEl.innerHTML += `<div class="wl-dot e"></div>`;
+      }
+
+      document.getElementById('dot').className = 'status-dot';
+    } catch(err) {
+      console.error(err);
+      document.getElementById('rankName').textContent = 'Fehler';
+      document.getElementById('dot').className = 'status-dot offline';
+    }
+  }
+
+  fetchAll();
+  setInterval(fetchAll, REFRESH);
+</script>
+</body>
+</html>
